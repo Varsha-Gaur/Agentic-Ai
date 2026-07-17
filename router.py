@@ -4,8 +4,9 @@ def detect_tool(user_input):
     text = user_input.lower()
 
     # Calculator
-    if re.search(r"\d+\s*[\+\-\*/]\s*\d+", text):
-        return "calculator", {"expression": user_input}
+    match = re.search(r"[\d\.\s]*[\+\-\*/][\d\.\s\+\-\*/]*", text)
+    if match and re.search(r"\d+\s*[\+\-\*/]\s*\d+", text):
+        return "calculator", {"expression": match.group().strip()}
 
     # Time
     if "time" in text or "date" in text:
