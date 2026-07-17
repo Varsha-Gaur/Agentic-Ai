@@ -1,4 +1,4 @@
-import ast
+ import ast
 import operator as op
 import math
 
@@ -48,8 +48,10 @@ def execute(arguments: dict):
         return "Calculator Error: Expression not provided."
 
     result = calculator(expression)
+
     if result.startswith("Calculator Error"):
         return result
+
     return f"The result of {expression} is {result}."
 
 
