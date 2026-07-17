@@ -1,3 +1,5 @@
+import json
+
 from LLM import chat
 from memory import load_memory, save_memory
 from prompts import SYSTEM_PROMPT
@@ -67,6 +69,20 @@ class Agent:
 
         except Exception as e:
             return f"LLM Error: {e}"
+
+        # -----------------------------
+        # If the LLM asked to use a tool (replied with JSON),
+        # run that tool instead of showing the raw JSON.
+        # -----------------------------
+        try:
+            tool_call = json.loads(response.strip())
+
+            if isinstance(tool_call, dict) and "tool" in tool_call:
+                llm_tool_name = tool_call.pop("tool")
+                response = str(execute_tool(llm_tool_name, tool_call))
+
+        except (json.JSONDecodeError, TypeError):
+            pass
 
         memory.append({
             "role": "user",
